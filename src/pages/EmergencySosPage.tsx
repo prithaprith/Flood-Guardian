@@ -28,6 +28,11 @@ const EmergencySosPage = () => {
   const { toast } = useToast();
   const [showNgoModal, setShowNgoModal] = useState(false);
   const [showFloodAlert, setShowFloodAlert] = useState(false);
+  const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+  const [showVolunteerModal, setShowVolunteerModal] = useState(false);
+  const [volunteers, setVolunteers] = useState<
+    { name: string; phone: string; location: string }[]
+  >([]);
 
   const [gpsStatus, setGpsStatus] = useState<
     "acquiring" | "acquired" | "unavailable"
@@ -238,7 +243,13 @@ const EmergencySosPage = () => {
 
         <Card
           className="p-4 cursor-pointer hover:shadow-lg transition-all duration-200 active:scale-95 bg-card/50 backdrop-blur-sm"
-          onClick={handleShareLocation}
+          onClick={() => {
+            const stored = localStorage.getItem("volunteers");
+            if (stored) {
+              setVolunteers(JSON.parse(stored));
+            }
+            setShowVolunteerModal(true);
+          }}
         >
           <div className="flex flex-col items-center space-y-2 text-center">
             <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
@@ -326,7 +337,13 @@ const EmergencySosPage = () => {
               <h2 className="text-xl font-bold">⚠️ FLOOD WARNING</h2>
               <button
                 className="text-white text-sm"
-                onClick={() => setShowFloodAlert(false)}
+                onClick={() => {
+                  setShowFloodAlert(false);
+                  if (audio) {
+                    audio.pause();
+                    audio.currentTime = 0;
+                  }
+                }}
               >
                 Close
               </button>
@@ -346,12 +363,71 @@ const EmergencySosPage = () => {
       )}
       <div className="flex justify-center mb-6">
         <Button
-          onClick={() => setShowFloodAlert(true)}
+          onClick={() => {
+            setShowFloodAlert(true);
+            const alertAudio = new Audio("/audio/flood_alert.mp3");
+            alertAudio.loop = true;
+            alertAudio.play();
+            setAudio(alertAudio);
+          }}
           className="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-6 rounded-lg shadow-md"
         >
           Simulate Flood Alert
         </Button>
       </div>
+      {showVolunteerModal && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-background rounded-2xl p-6 w-[90%] max-w-md shadow-lg relative">
+            {/* Close Button */}
+            <button
+              className="absolute top-2 right-3 text-muted-foreground hover:text-foreground"
+              onClick={() => setShowVolunteerModal(false)}
+            >
+              <XCircle className="h-5 w-5" />
+            </button>
+
+            {/* Modal Title */}
+            <h2 className="text-lg font-semibold mb-4 text-center">
+              Community Volunteers
+            </h2>
+
+            {/* Volunteer List */}
+            {volunteers.length === 0 ? (
+              <p className="text-center text-sm text-muted-foreground">
+                No volunteers found.
+              </p>
+            ) : (
+              <div className="space-y-3 max-h-[60vh] overflow-y-auto">
+                {volunteers.map((vol, idx) => (
+                  <div
+                    key={idx}
+                    className="flex justify-between items-center border border-border rounded-xl p-3 bg-background/50 hover:shadow-md transition"
+                  >
+                    <div className="flex flex-col">
+                      <span className="font-medium">{vol.name}</span>
+                      <span className="text-sm text-muted-foreground">
+                        {vol.location}
+                      </span>
+                      <span className="text-sm text-muted-foreground">
+                        {vol.phone}
+                      </span>
+                    </div>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      onClick={() =>
+                        (window.location.href = `tel:${vol.phone}`)
+                      }
+                    >
+                      Call
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

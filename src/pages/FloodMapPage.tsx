@@ -123,20 +123,32 @@ const FloodMapPage = () => {
       name: "Community Center",
       distance: "0.5 km",
       capacity: "500 people",
+      latitude: "9.06",
+      longitude: "8.66",
     },
     {
       id: 2,
       name: "School Building",
       distance: "1.2 km",
       capacity: "300 people",
+      latitude: "9.07",
+      longitude: "8.67",
     },
-    { id: 3, name: "Hospital", distance: "2.1 km", capacity: "200 people" },
-
+    {
+      id: 3,
+      name: "Hospital",
+      distance: "2.1 km",
+      capacity: "200 people",
+      latitude: "9.08",
+      longitude: "8.68",
+    },
     ...storedShelters.map((shelter: UserShelter, idx: number) => ({
       id: 100 + idx,
       name: shelter.name,
-      distance: `${Math.random().toFixed(2)} km`, // You can calculate using coordinates later
+      distance: `${Math.random().toFixed(2)} km`,
       capacity: `${shelter.capacity} people`,
+      latitude: shelter.latitude,
+      longitude: shelter.longitude,
     })),
   ];
 
@@ -326,7 +338,17 @@ const FloodMapPage = () => {
                       {shelter.distance} • {shelter.capacity}
                     </p>
                   </div>
-                  <Button size="sm" onClick={() => navigate("/safe-route")}>
+                  <Button
+                    size="sm"
+                    onClick={() => {
+                      const userLat = 9.05;
+                      const userLng = 8.65;
+                      const destinationLat = shelter.latitude;
+                      const destinationLng = shelter.longitude;
+                      const mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLng}&destination=${destinationLat},${destinationLng}&travelmode=driving`;
+                      window.open(mapsUrl, "_blank");
+                    }}
+                  >
                     Get Directions
                   </Button>
                 </div>

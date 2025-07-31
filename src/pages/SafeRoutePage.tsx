@@ -46,6 +46,21 @@ const SafeRoutePage = () => {
     [number, number] | null
   >(null);
 
+  type RecommendedRoute = {
+    id: number;
+    name: string;
+    distance: string;
+    time: string;
+    safety: "Very High" | "High" | "Medium" | "Low";
+    warnings: string[];
+    landmarks: string[];
+    snappedCoord: [number, number];
+  };
+
+  const [recommendedRoutes, setRecommendedRoutes] = useState<
+    RecommendedRoute[]
+  >([]);
+
   const [nearestRoadProperties, setNearestRoadProperties] = useState<{
     ROADNO?: string;
     LANES?: number;
@@ -134,6 +149,51 @@ const SafeRoutePage = () => {
     `
       )
       .addTo(map.current!);
+  };
+
+  const generateRecommendedRoutes = () => {
+    if (!userLocation || !geoJsonData) return;
+
+    const userPoint: Feature<Point> = turf.point(userLocation);
+    const features = geoJsonData.features as RoadFeature[];
+
+    const scoredRoads = features
+      .map((road: RoadFeature, index: number) => {
+        const snapped = turf.nearestPointOnLine(road, userPoint);
+        const distance = turf.distance(userPoint, snapped, {
+          units: "kilometers",
+        });
+
+        const condition = road.properties.CONDITION as string | undefined;
+        const width = road.properties.WIDTH as number | undefined;
+
+        let safety: "Very High" | "High" | "Medium" | "Low" = "Low";
+        if (condition === "Very Good") safety = "Very High";
+        else if (condition === "Good") safety = "High";
+        else if (condition === "Fair") safety = "Medium";
+
+        const route: RecommendedRoute = {
+          id: index + 1,
+          name: `Route via ${road.properties.ROADNO || "Unnamed Road"}`,
+          distance: `${(distance * 1000).toFixed(1)} m`,
+          time: `${Math.round((distance * 60) / 5)} min`,
+          safety,
+          warnings:
+            condition === "Poor" ? ["Avoid this road – poor condition"] : [],
+          landmarks: [
+            `Width: ${width ?? "?"} m`,
+            `Condition: ${condition ?? "Unknown"}`,
+          ],
+          snappedCoord: snapped.geometry.coordinates as [number, number],
+        };
+
+        return { route, distance };
+      })
+      .sort((a, b) => a.distance - b.distance)
+      .slice(0, 3)
+      .map((entry) => entry.route);
+
+    setRecommendedRoutes(scoredRoads);
   };
 
   const findNearestRoad = () => {
@@ -262,12 +322,19 @@ const SafeRoutePage = () => {
     });
   }, [geoJsonData]);
 
+  useEffect(() => {
+    if (userLocation && geoJsonData) {
+      generateRecommendedRoutes();
+    }
+  }, [userLocation, geoJsonData]);
+
   // Function to locate user
   const locateUser = () => {
     if (debugMode) {
       const nigeriaLocation = DEBUG_LOCATION_NIGERIA;
       setUserLocation(nigeriaLocation);
       moveToLocation(nigeriaLocation);
+      reverseGeocode(nigeriaLocation);
     } else {
       if (!navigator.geolocation) {
         alert("Geolocation is not supported by your browser");
@@ -282,6 +349,7 @@ const SafeRoutePage = () => {
           ];
           setUserLocation(loc);
           moveToLocation(loc);
+          reverseGeocode(loc);
         },
         () => {
           alert("Unable to retrieve your location");
@@ -307,6 +375,44 @@ const SafeRoutePage = () => {
         .addTo(map.current);
     }
   };
+  const [placeName, setPlaceName] = useState<string | null>(null);
+
+  const reverseGeocode = async ([lng, lat]: [number, number]) => {
+    try {
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`
+      );
+      const data = await res.json();
+      const name =
+        data.display_name ||
+        data.name ||
+        data.address?.city ||
+        data.address?.town ||
+        data.address?.village ||
+        "Unknown location";
+      setPlaceName(name);
+    } catch (err) {
+      console.error("Reverse geocoding failed", err);
+      setPlaceName("Unknown location");
+    }
+  };
+
+  function getSurfaceTypeLabel(code: string): string {
+    const surfaceTypes: Record<string, string> = {
+      AS: "Asphalt",
+      GR: "Gravel",
+      ER: "Earth",
+      CB: "Cobblestone",
+      CN: "Concrete",
+      SD: "Sand",
+      ST: "Stone",
+      UN: "Unknown",
+      BM: "Bituminous Material",
+      BL: "Blacktop",
+    };
+
+    return surfaceTypes[code] || "Unknown Surface";
+  }
 
   // 💡 Transport modes and static routes
   const transportModes = [
@@ -368,6 +474,11 @@ const SafeRoutePage = () => {
             <div className="col space-y-2">
               <label className="text-sm font-medium mb-2 block">
                 Locate your current position
+                {placeName && (
+                  <p className="mt-3 text-sm text-gray-600 italic">
+                    You are near: <strong>{placeName}</strong>
+                  </p>
+                )}
               </label>
 
               <div className="col space-x-2 ">
@@ -392,14 +503,14 @@ const SafeRoutePage = () => {
                     </p>
                     <p>
                       <span className="text-gray-700">Surface Type:</span>{" "}
-                      {nearestRoadProperties.SURFTYPE}
+                      {getSurfaceTypeLabel(nearestRoadProperties.SURFTYPE)}
                     </p>
-                    <p>
+                    {/* <p>
                       <span className="text-gray-700">Pavement Type:</span>{" "}
                       {nearestRoadProperties.PAVETYPE}
-                    </p>
+                    </p> */}
                     <p>
-                      <span className="text-gray-700">Condition:</span>{" "}
+                      <span className="text-red-500">Condition:</span>{" "}
                       {nearestRoadProperties.CONDITION}
                     </p>
                     <p>
@@ -410,11 +521,11 @@ const SafeRoutePage = () => {
 
                   {nearestRoadProperties.CONDITION === "Poor" && (
                     <Button
-                      variant="destructive"
-                      className="mt-4"
+                      variant="default"
+                      className="mt-4 bg-green-600 hover:bg-green-700 text-white"
                       onClick={findNextBestRoad}
                     >
-                      🚫 This road is in poor condition. Find alternative road
+                      Press to find alternative road
                     </Button>
                   )}
                 </div>
@@ -462,66 +573,80 @@ const SafeRoutePage = () => {
           <Navigation className="h-6 w-6 mr-2 text-green-500" />
           Recommended Safe Routes
         </h2>
-        {safeRoutes.map((route) => (
-          <Card key={route.id} className="border-l-4 border-l-green-500">
-            <CardContent className="p-4">
-              <div className="flex justify-between items-start mb-3">
-                <div>
-                  <h3 className="font-semibold text-lg">{route.name}</h3>
-                  <div className="flex items-center space-x-4 text-sm text-muted-foreground">
-                    <span className="flex items-center">
-                      <MapPin className="h-4 w-4 mr-1" />
-                      {route.distance}
-                    </span>
-                    <span className="flex items-center">
-                      <Clock className="h-4 w-4 mr-1" />
-                      {route.time}
-                    </span>
+        {recommendedRoutes.length > 0 ? (
+          recommendedRoutes.map((route) => (
+            <Card key={route.id} className="border-l-4 border-l-green-500">
+              <CardContent className="p-4">
+                <div className="flex justify-between items-start mb-3">
+                  <div>
+                    <h3 className="font-semibold text-lg">{route.name}</h3>
+                    <div className="flex items-center space-x-4 text-sm text-muted-foreground">
+                      <span className="flex items-center">
+                        <MapPin className="h-4 w-4 mr-1" />
+                        {route.distance}
+                      </span>
+                      <span className="flex items-center">
+                        <Clock className="h-4 w-4 mr-1" />
+                        {route.time}
+                      </span>
+                    </div>
+                  </div>
+                  <span
+                    className={`px-2 py-1 rounded-full text-xs font-medium ${getSafetyColor(
+                      route.safety
+                    )}`}
+                  >
+                    {route.safety} Safety
+                  </span>
+                </div>
+
+                {route.warnings.length > 0 && (
+                  <div className="mb-3">
+                    {route.warnings.map((warning, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center text-amber-600 bg-amber-50 p-2 rounded text-sm"
+                      >
+                        <AlertTriangle className="h-4 w-4 mr-2" />
+                        {warning}
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                <div className="mb-3">
+                  <p className="text-sm font-medium mb-1">Road Details:</p>
+                  <div className="flex flex-wrap gap-1">
+                    {route.landmarks.map((landmark, index) => (
+                      <span
+                        key={index}
+                        className="bg-muted px-2 py-1 rounded text-xs"
+                      >
+                        {landmark}
+                      </span>
+                    ))}
                   </div>
                 </div>
-                <span
-                  className={`px-2 py-1 rounded-full text-xs font-medium ${getSafetyColor(
-                    route.safety
-                  )}`}
+
+                <Button
+                  className="w-full gradient-safe text-white border-0"
+                  onClick={() => {
+                    const [startLng, startLat] = userLocation!;
+                    const [endLng, endLat] = route.snappedCoord;
+                    const url = `https://www.google.com/maps/dir/?api=1&origin=${startLat},${startLng}&destination=${endLat},${endLng}&travelmode=walking`;
+                    window.open(url, "_blank");
+                  }}
                 >
-                  {route.safety} Safety
-                </span>
-              </div>
-
-              {route.warnings.length > 0 && (
-                <div className="mb-3">
-                  {route.warnings.map((warning, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center text-amber-600 bg-amber-50 p-2 rounded text-sm"
-                    >
-                      <AlertTriangle className="h-4 w-4 mr-2" />
-                      {warning}
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              <div className="mb-3">
-                <p className="text-sm font-medium mb-1">Key Landmarks:</p>
-                <div className="flex flex-wrap gap-1">
-                  {route.landmarks.map((landmark, index) => (
-                    <span
-                      key={index}
-                      className="bg-muted px-2 py-1 rounded text-xs"
-                    >
-                      {landmark}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <Button className="w-full gradient-safe text-white border-0">
-                Start Navigation
-              </Button>
-            </CardContent>
-          </Card>
-        ))}
+                  Start Navigation
+                </Button>
+              </CardContent>
+            </Card>
+          ))
+        ) : (
+          <div className="text-muted-foreground text-sm">
+            Locate your position to get safe route recommendations.
+          </div>
+        )}
       </div>
 
       {/* Volunteer List */}
@@ -558,7 +683,7 @@ const SafeRoutePage = () => {
 
                   {/* Call Button */}
                   <button
-                    onClick={() => (window.location.href = volunteer.phone)}
+                    onClick={() => (window.location.href =`tel:${volunteer.phone}`)}
                     className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-1"
                   >
                     <Phone className="w-4 h-4" />

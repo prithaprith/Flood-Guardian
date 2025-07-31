@@ -86,7 +86,7 @@ const HomePage = () => {
       path: "/settings",
     },
     {
-      title: "Add Safe Route",
+      title: "Assign Shelter",
       icon: Navigation,
       path: "/add-shelter",
     },
@@ -103,7 +103,7 @@ const HomePage = () => {
     {
       title: "Offline Chat",
       icon: MessageCircle,
-      path: "/offline-chat",
+      path: "/messenger",
     },
   ];
 

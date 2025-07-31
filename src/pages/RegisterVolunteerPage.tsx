@@ -26,7 +26,7 @@ const RegisterVolunteerPage = () => {
   };
 
   return (
-    <div className="min-h-screen p-4">
+    <div className="p-6 max-w-md mx-auto">
       <h1 className="text-2xl font-bold mb-4">Register as Volunteer</h1>
       <Card>
         <CardContent className="space-y-4 p-6">

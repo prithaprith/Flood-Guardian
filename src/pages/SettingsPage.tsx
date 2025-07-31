@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -29,6 +29,8 @@ const SettingsPage = () => {
   const [isPregnant, setIsPregnant] = useState(false);
   const [hasElderly, setHasElderly] = useState(false);
   const [hasChild, setHasChild] = useState(false);
+  const [userName, setUserName] = useState("Anonymous User");
+  const [location, setLocation] = useState("Detecting...");
 
   const [emergencyContacts, setEmergencyContacts] = useState([
     { name: "", phone: "" },
@@ -139,12 +141,42 @@ const SettingsPage = () => {
   ];
 
   const handleSave = () => {
+    localStorage.setItem("userName", userName);
     localStorage.setItem(
       "emergencyContacts",
       JSON.stringify(emergencyContacts)
     );
     alert("Settings saved successfully!");
   };
+
+  useEffect(() => {
+    const savedName = localStorage.getItem("userName");
+    if (savedName) setUserName(savedName);
+
+    // Auto-detect location
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+
+          try {
+            const response = await fetch(
+              `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+            );
+            const data = await response.json();
+            setLocation(data.address?.city || data.display_name || "Unknown");
+          } catch (error) {
+            setLocation("Failed to detect location");
+          }
+        },
+        () => {
+          setLocation("Permission denied");
+        }
+      );
+    } else {
+      setLocation("Geolocation not supported");
+    }
+  }, []);
 
   return (
     <div className="min-h-screen p-4">
@@ -162,22 +194,23 @@ const SettingsPage = () => {
       </div>
 
       {/* User Profile */}
-      <Card className="mb-6">
-        <CardContent className="p-4">
-          <div className="flex items-center space-x-4">
-            <div className="bg-primary p-3 rounded-full">
-              <User className="h-8 w-8 text-primary-foreground" />
-            </div>
-            <div>
-              <h3 className="font-semibold text-lg">Anonymous User</h3>
-              <p className="text-sm text-muted-foreground">
-                Location: Downtown District
-              </p>
-            </div>
+      <Card className="mb-6 p-4">
+        <div className="flex items-center space-x-4">
+          <div className="bg-primary p-3 rounded-full">
+            <User className="h-8 w-8 text-primary-foreground" />
           </div>
-        </CardContent>
+          <div className="flex-1">
+            <Input
+              className="font-semibold text-lg mb-1"
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
+            />
+            <p className="text-sm text-muted-foreground">
+              Location: {location}
+            </p>
+          </div>
+        </div>
       </Card>
-
       {/* Settings Sections */}
       {settingSections.map((section, sectionIndex) => (
         <Card key={sectionIndex} className="mb-6">
@@ -293,28 +326,6 @@ const SettingsPage = () => {
                 Local Weather Service
               </span>
             </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Privacy & Safety */}
-      <Card className="mb-6">
-        <CardContent className="p-4">
-          <h3 className="font-semibold text-lg mb-4 flex items-center">
-            <Shield className="h-6 w-6 mr-2 text-green-500" />
-            Privacy & Safety
-          </h3>
-
-          <div className="space-y-3">
-            <Button variant="outline" className="w-full justify-start">
-              Privacy Policy
-            </Button>
-            <Button variant="outline" className="w-full justify-start">
-              Terms of Service
-            </Button>
-            <Button variant="outline" className="w-full justify-start">
-              Data Usage
-            </Button>
           </div>
         </CardContent>
       </Card>

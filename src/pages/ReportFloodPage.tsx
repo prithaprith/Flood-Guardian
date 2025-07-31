@@ -1,34 +1,48 @@
-
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Textarea } from '@/components/ui/textarea';
-import { Slider } from '@/components/ui/slider';
-import { 
-  ArrowLeft, 
-  Camera, 
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
+import { Slider } from "@/components/ui/slider";
+import {
+  ArrowLeft,
+  Camera,
   MapPin,
   Upload,
   Droplets,
   AlertTriangle,
   Clock,
-  CheckCircle
-} from 'lucide-react';
+  CheckCircle,
+} from "lucide-react";
 
 const ReportFloodPage = () => {
   const navigate = useNavigate();
   const [waterDepth, setWaterDepth] = useState([50]);
-  const [severity, setSeverity] = useState('moderate');
-  const [description, setDescription] = useState('');
+  const [severity, setSeverity] = useState("moderate");
+  const [description, setDescription] = useState("");
   const [hasPhoto, setHasPhoto] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const now = new Date();
+  const formattedDateTime = now.toLocaleString("en-US", {
+    weekday: "short",
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
 
   const severityLevels = [
-    { id: 'low', label: 'Minor Flooding', color: 'bg-green-500', icon: '💧' },
-    { id: 'moderate', label: 'Moderate Flooding', color: 'bg-amber-500', icon: '🌊' },
-    { id: 'high', label: 'Severe Flooding', color: 'bg-red-500', icon: '⚠️' }
+    { id: "low", label: "Minor Flooding", color: "bg-green-500", icon: "💧" },
+    {
+      id: "moderate",
+      label: "Moderate Flooding",
+      color: "bg-amber-500",
+      icon: "🌊",
+    },
+    { id: "high", label: "Severe Flooding", color: "bg-red-500", icon: "⚠️" },
   ];
 
   const handlePhotoUpload = () => {
@@ -38,15 +52,15 @@ const ReportFloodPage = () => {
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
-    
+
     // Simulate API call
     setTimeout(() => {
       setIsSubmitting(false);
       setIsSubmitted(true);
-      
+
       // Auto-navigate back after success
       setTimeout(() => {
-        navigate('/');
+        navigate("/");
       }, 2000);
     }, 2000);
   };
@@ -59,7 +73,8 @@ const ReportFloodPage = () => {
             <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
             <h2 className="text-2xl font-bold mb-2">Report Submitted!</h2>
             <p className="text-muted-foreground mb-4">
-              Thank you for helping your community stay safe. Your report has been verified and added to the flood map.
+              Thank you for helping your community stay safe. Your report has
+              been verified and added to the flood map.
             </p>
             <p className="text-sm text-green-600 font-medium">
               Redirecting to home...
@@ -74,7 +89,7 @@ const ReportFloodPage = () => {
     <div className="min-h-screen p-4">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <Button variant="ghost" onClick={() => navigate('/')}>
+        <Button variant="ghost" onClick={() => navigate("/")}>
           <ArrowLeft className="h-6 w-6 mr-2" />
           Back
         </Button>
@@ -91,7 +106,12 @@ const ReportFloodPage = () => {
             </div>
             <div>
               <p className="font-semibold">Current Location</p>
-              <p className="text-sm text-muted-foreground">Downtown District • GPS: 23.7465, 90.3763</p>
+              <p className="text-sm text-muted-foreground">
+                Downtown District • GPS: 23.7465, 90.3763
+              </p>
+              <p className="text-sm text-muted-foreground mt-1">
+                {formattedDateTime}
+              </p>
             </div>
           </div>
         </CardContent>
@@ -104,7 +124,7 @@ const ReportFloodPage = () => {
             <Camera className="h-5 w-5 mr-2" />
             Add Photo (Optional)
           </h3>
-          
+
           {!hasPhoto ? (
             <Button
               variant="outline"
@@ -132,7 +152,7 @@ const ReportFloodPage = () => {
             <Droplets className="h-5 w-5 mr-2" />
             Estimated Water Depth
           </h3>
-          
+
           <div className="space-y-4">
             <Slider
               value={waterDepth}
@@ -144,7 +164,9 @@ const ReportFloodPage = () => {
             />
             <div className="flex justify-between text-sm text-muted-foreground">
               <span>0 cm</span>
-              <span className="font-semibold text-primary">{waterDepth[0]} cm</span>
+              <span className="font-semibold text-primary">
+                {waterDepth[0]} cm
+              </span>
               <span>200+ cm</span>
             </div>
           </div>
@@ -158,14 +180,14 @@ const ReportFloodPage = () => {
             <AlertTriangle className="h-5 w-5 mr-2" />
             Severity Level
           </h3>
-          
+
           <div className="grid grid-cols-1 gap-3">
             {severityLevels.map((level) => (
               <Button
                 key={level.id}
                 variant={severity === level.id ? "default" : "outline"}
                 className={`h-14 justify-start ${
-                  severity === level.id ? level.color : ''
+                  severity === level.id ? level.color : ""
                 }`}
                 onClick={() => setSeverity(level.id)}
               >
@@ -217,7 +239,9 @@ const ReportFloodPage = () => {
       <Card className="bg-blue-50 border-blue-200 mb-4">
         <CardContent className="p-4">
           <p className="text-blue-800 text-sm">
-            <strong>Note:</strong> Your report will be automatically verified using AI and added to the live flood map to help others in your community stay safe.
+            <strong>Note:</strong> Your report will be automatically verified
+            using AI and added to the live flood map to help others in your
+            community stay safe.
           </p>
         </CardContent>
       </Card>
