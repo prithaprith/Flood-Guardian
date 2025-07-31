@@ -27,6 +27,7 @@ const EmergencySosPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [showNgoModal, setShowNgoModal] = useState(false);
+  const [showFloodAlert, setShowFloodAlert] = useState(false);
 
   const [gpsStatus, setGpsStatus] = useState<
     "acquiring" | "acquired" | "unavailable"
@@ -318,6 +319,39 @@ const EmergencySosPage = () => {
           ))}
         </div>
       </Card>
+      {showFloodAlert && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4">
+          <div className="bg-red-600 text-white p-6 rounded-2xl shadow-lg max-w-md w-full animate-pulse border-4 border-white">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold">⚠️ FLOOD WARNING</h2>
+              <button
+                className="text-white text-sm"
+                onClick={() => setShowFloodAlert(false)}
+              >
+                Close
+              </button>
+            </div>
+            <p className="text-sm leading-relaxed">
+              🚨 *Flood Alert Issued!* Immediate action is advised. Rising water
+              levels detected in your area.
+              <br />
+              <br />
+              ✅ Move to higher ground
+              <br />
+              ✅ Keep emergency supplies ready
+              <br />✅ Avoid roads and flood zones
+            </p>
+          </div>
+        </div>
+      )}
+      <div className="flex justify-center mb-6">
+        <Button
+          onClick={() => setShowFloodAlert(true)}
+          className="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-6 rounded-lg shadow-md"
+        >
+          Simulate Flood Alert
+        </Button>
+      </div>
     </div>
   );
 };

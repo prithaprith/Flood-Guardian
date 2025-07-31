@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Phone, MessageCircle } from "lucide-react";
+
 import {
   ArrowLeft,
   Navigation,
@@ -125,7 +127,9 @@ const SafeRoutePage = () => {
         <span>Surface:</span> ${road.properties.SURFTYPE || "N/A"}<br/>
         <span>Pavement:</span> ${road.properties.PAVETYPE || "N/A"}<br/>
         <span>Condition:</span> ${road.properties.CONDITION || "N/A"}<br/>
-        <span>Road Width:</span> ${road.properties.WIDTH || "N/A"} <span>m</span>
+        <span>Road Width:</span> ${
+          road.properties.WIDTH || "N/A"
+        } <span>m</span>
       </div>
     `
       )
@@ -207,7 +211,9 @@ const SafeRoutePage = () => {
           <span>Condition:</span> ${
             nearestRoadProperties.CONDITION || "N/A"
           }<br/>
-          <span>Road Width:</span> ${nearestRoadProperties.WIDTH || "N/A"}<span> m</span>
+          <span>Road Width:</span> ${
+            nearestRoadProperties.WIDTH || "N/A"
+          }<span> m</span>
         </div>
       `
           )
@@ -540,16 +546,25 @@ const SafeRoutePage = () => {
                 <p className="font-semibold ">{volunteer.name}</p>
                 <p className="text-sm">📞 {volunteer.phone}</p>
                 <p className="text-sm">📍 {volunteer.location}</p>
-                
-                <button
-                  onClick={() =>
-                    alert(`Messaging ${volunteer.name} at ${volunteer.phone}`)
-                  }
-                  className="ml-auto bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium"
-                >
-                  Message
-                </button>
-                
+                <div className="flex justify-end gap-2 mt-2 ms-auto">
+                  {/* Message Button */}
+                  <button
+                    onClick={() => navigate("/offline-chat")}
+                    className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-1"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    Message
+                  </button>
+
+                  {/* Call Button */}
+                  <button
+                    onClick={() => (window.location.href = volunteer.phone)}
+                    className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-1"
+                  >
+                    <Phone className="w-4 h-4" />
+                    Call
+                  </button>
+                </div>
               </CardContent>
             </Card>
           ));

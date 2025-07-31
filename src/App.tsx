@@ -17,8 +17,7 @@ import NotFound from "./pages/NotFound";
 import EmergencySosPage from "./pages/EmergencySosPage";
 import GalleryPage from "@/pages/GalleryPage";
 import RegisterVolunteerPage from "./pages/RegisterVolunteerPage";
-
-
+import OfflineChatPage from "@/pages/OfflineChatPage";
 
 
 const queryClient = new QueryClient();
@@ -44,6 +43,7 @@ const App = () => (
             <Route path="/emergency-sos" element={<EmergencySosPage />} />
             <Route path="/gallery" element={<GalleryPage />} />
             <Route path="/register-volunteer" element={<RegisterVolunteerPage />} />
+            <Route path="/offline-chat" element={<OfflineChatPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>

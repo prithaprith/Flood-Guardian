@@ -1,12 +1,11 @@
-
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  ArrowLeft, 
-  BookOpen, 
+import {
+  ArrowLeft,
+  BookOpen,
   AlertTriangle,
   Shield,
   Package,
@@ -14,7 +13,17 @@ import {
   Home,
   Phone,
   Droplets,
-  Car
+  Car,
+  Baby,
+  BatteryCharging,
+  Radio,
+  FileText,
+  DollarSign,
+  Power,
+  Heart,
+  HelpCircle,
+  Smile,
+  Anchor
 } from 'lucide-react';
 
 const FloodGuidePage = () => {
@@ -24,17 +33,41 @@ const FloodGuidePage = () => {
     beforeFlood: [
       {
         icon: Package,
-        title: 'Emergency Kit',
+        title: 'Emergency Kit Essentials',
         items: [
           'Water (1 gallon per person per day for 3 days)',
+          'Water purification tablets',
           'Non-perishable food for 3 days',
-          'Battery-powered radio',
-          'Flashlight and extra batteries',
-          'First aid kit',
           'Medications (7-day supply)',
+          'First aid kit',
+          'Personal hygiene items'
+        ]
+      },
+      {
+        icon: BatteryCharging,
+        title: 'Gadgets & Tools',
+        items: [
+          'Fire starter',
+          'Flashlight and extra batteries',
+          'Fully charged powerbank',
+          'Battery-powered radio'
+        ]
+      },
+      {
+        icon: FileText,
+        title: 'Documents & Cards',
+        items: [
           'Important documents (waterproof container)',
           'Cash and credit cards',
           'Emergency contact information'
+        ]
+      },
+      {
+        icon: Baby,
+        title: 'Supplies (If Applicable)',
+        items: [
+          "Baby supplies",
+          "Livestock's supplies"
         ]
       },
       {
@@ -44,11 +77,14 @@ const FloodGuidePage = () => {
           'Know your evacuation routes',
           'Clear storm drains and gutters',
           'Install sump pumps and backup power',
-          'Waterproof basement walls',
-          'Keep sandbags on hand',
-          'Elevate utilities above potential flood levels',
-          'Create a family communication plan',
-          'Practice your evacuation plan'
+          'Use waterproof sheeting and sealants on basement walls and entryways',
+          'Keep sandbags on hand, place it on toilets and drains if necessary',
+          'Keep rubber boots',
+          'Elevate utilities especially electronics above potential flood levels',
+          'Secure loose outdoor items',
+          'Anchor fuel tanks',
+          'Keep chemicals in waterproof bags',
+          'Practice your evacuation plan with everybody in the home'
         ]
       }
     ],
@@ -59,11 +95,14 @@ const FloodGuidePage = () => {
         items: [
           'Move to higher ground immediately',
           'Never walk through flowing water',
-          'Avoid driving through flooded roads',
+          'Avoid bridges over fast-moving water',
+          'Never climb into anything closed',
+          'Wear sturdy shoes',
+          'Use insect repellent',
           'Stay away from downed power lines',
           'Listen to emergency broadcasts',
           'Turn off utilities if instructed',
-          'Do not drink flood water',
+          'DO NOT DRINK FLOOD WATER',
           'Signal for help if trapped'
         ]
       },
@@ -78,35 +117,73 @@ const FloodGuidePage = () => {
           'Call for help and wait for rescue',
           'Stay with your vehicle if safe'
         ]
+      },
+      {
+        icon: Anchor,
+        title: 'If Boating',
+        items: [
+          'Avoid boating in floodwaters',
+          'Wear life jacket at all times, if available',
+          'Avoid fast-moving currents and submerged objects',
+          'Keep emergency supplies onboard',
+          'DO NOT OVERLOAD THE BOAT',
+          'Have a float plan'
+        ]
       }
     ],
     afterFlood: [
       {
         icon: Shield,
-        title: 'Stay Safe',
+        title: 'Personal Safety',
         items: [
-          'Wait for authorities to say it\'s safe to return',
           'Avoid flood water - it may be contaminated',
-          'Check for structural damage before entering',
-          'Document damage with photos',
-          'Contact your insurance company',
+          'Wait for authorities to say it\'s safe to return',
           'Throw away contaminated food',
-          'Clean and disinfect everything',
-          'Watch for signs of stress and trauma'
+          'Avoid open wounds exposure',
+          'Clean and disinfect everything'
+        ]
+      },
+      {
+        icon: Home,
+        title: 'Home Safety',
+        items: [
+          'Check for gas leaks',
+          'Avoid using wet electrical appliances',
+          'Ventilate your home',
+          'Dispose of soaked insulation & drywall',
+          'Test drinking water',
+          'Document damage with photos',
+          'Contact your insurance company'
         ]
       },
       {
         icon: Phone,
-        title: 'Recovery',
+        title: 'Immediate Recovery',
         items: [
           'Contact family and let them know you\'re safe',
-          'Apply for disaster assistance if needed',
-          'Keep receipts for cleanup costs',
-          'Beware of contractor fraud',
+          'Visit relief centers',
+          'Meet with doctors or health workers',
+          'Apply for disaster assistance'
+        ]
+      },
+      {
+        icon: Smile,
+        title: 'Mental & Community Wellbeing',
+        items: [
           'Take care of your mental health',
-          'Help neighbors who need assistance',
+          'Help your neighbours',
+          'Watch for signs of stress and trauma',
+          'Take breaks during cleanup'
+        ]
+      },
+      {
+        icon: HelpCircle,
+        title: 'Long-Term Resilience',
+        items: [
           'Learn from the experience',
-          'Update your emergency plan'
+          'Update your emergency plan',
+          'Explore mitigation grants',
+          'Consider rebuilding with flood-resistant materials'
         ]
       }
     ]
@@ -134,14 +211,8 @@ const FloodGuidePage = () => {
     <div className="min-h-screen p-4">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <Button variant="ghost" onClick={() => navigate('/')}>
-          <ArrowLeft className="h-6 w-6 mr-2" />
-          Back
-        </Button>
-        <h1 className="text-2xl font-bold flex items-center">
-          <BookOpen className="h-7 w-7 mr-2 text-primary" />
-          Flood Safety Guide
-        </h1>
+        <Button variant="ghost" onClick={() => navigate('/')}> <ArrowLeft className="h-6 w-6 mr-2" /> Back </Button>
+        <h1 className="text-2xl font-bold flex items-center"> <BookOpen className="h-7 w-7 mr-2 text-primary" /> Flood Safety Guide </h1>
         <div className="w-20" />
       </div>
 
@@ -164,7 +235,7 @@ const FloodGuidePage = () => {
         ))}
       </div>
 
-      {/* Tabbed Content */}
+      {/* Tabs */}
       <Tabs defaultValue="before" className="mb-20">
         <TabsList className="grid w-full grid-cols-3 mb-6">
           <TabsTrigger value="before" className="text-sm">Before Flood</TabsTrigger>
@@ -172,68 +243,28 @@ const FloodGuidePage = () => {
           <TabsTrigger value="after" className="text-sm">After Flood</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="before" className="space-y-6">
-          {guideData.beforeFlood.map((section, index) => (
-            <Card key={index}>
-              <CardContent className="p-4">
-                <h3 className="font-semibold text-lg mb-4 flex items-center">
-                  <section.icon className="h-6 w-6 mr-2 text-blue-500" />
-                  {section.title}
-                </h3>
-                <div className="space-y-2">
-                  {section.items.map((item, itemIndex) => (
-                    <div key={itemIndex} className="flex items-start space-x-3">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0" />
-                      <p className="text-sm">{item}</p>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </TabsContent>
-
-        <TabsContent value="during" className="space-y-6">
-          {guideData.duringFlood.map((section, index) => (
-            <Card key={index}>
-              <CardContent className="p-4">
-                <h3 className="font-semibold text-lg mb-4 flex items-center">
-                  <section.icon className="h-6 w-6 mr-2 text-red-500" />
-                  {section.title}
-                </h3>
-                <div className="space-y-2">
-                  {section.items.map((item, itemIndex) => (
-                    <div key={itemIndex} className="flex items-start space-x-3">
-                      <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0" />
-                      <p className="text-sm">{item}</p>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </TabsContent>
-
-        <TabsContent value="after" className="space-y-6">
-          {guideData.afterFlood.map((section, index) => (
-            <Card key={index}>
-              <CardContent className="p-4">
-                <h3 className="font-semibold text-lg mb-4 flex items-center">
-                  <section.icon className="h-6 w-6 mr-2 text-green-500" />
-                  {section.title}
-                </h3>
-                <div className="space-y-2">
-                  {section.items.map((item, itemIndex) => (
-                    <div key={itemIndex} className="flex items-start space-x-3">
-                      <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0" />
-                      <p className="text-sm">{item}</p>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </TabsContent>
+        {['before', 'during', 'after'].map((phase, phaseIndex) => (
+          <TabsContent key={phaseIndex} value={phase} className="space-y-6">
+            {guideData[`${phase}Flood`].map((section, index) => (
+              <Card key={index}>
+                <CardContent className="p-4">
+                  <h3 className={`font-semibold text-lg mb-4 flex items-center`}>
+                    <section.icon className={`h-6 w-6 mr-2 ${phase === 'before' ? 'text-blue-500' : phase === 'during' ? 'text-red-500' : 'text-green-500'}`} />
+                    {section.title}
+                  </h3>
+                  <div className="space-y-2">
+                    {section.items.map((item, itemIndex) => (
+                      <div key={itemIndex} className="flex items-start space-x-3">
+                        <div className={`w-2 h-2 ${phase === 'before' ? 'bg-blue-500' : phase === 'during' ? 'bg-red-500' : 'bg-green-500'} rounded-full mt-2 flex-shrink-0`} />
+                        <p className="text-sm">{item}</p>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </TabsContent>
+        ))}
       </Tabs>
 
       {/* Emergency Action */}
@@ -242,10 +273,7 @@ const FloodGuidePage = () => {
           <div className="text-center">
             <AlertTriangle className="h-8 w-8 text-red-600 mx-auto mb-2" />
             <p className="text-red-800 font-semibold mb-2">Emergency Situation?</p>
-            <Button 
-              className="bg-red-500 hover:bg-red-600 text-white"
-              onClick={() => navigate('/chat')}
-            >
+            <Button className="bg-red-500 hover:bg-red-600 text-white" onClick={() => navigate('/chat')}>
               Get Immediate Help
             </Button>
           </div>
