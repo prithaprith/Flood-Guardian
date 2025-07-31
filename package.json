@@ -85,6 +85,6 @@
     "vite": "^5.4.1"
   },
   "publishConfig": {
-  "@prithaprith:registry": "https://npm.pkg.github.com"
-}
+    "registry": "https://npm.pkg.github.com/@prithaprith"
+  }
 }
