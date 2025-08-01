@@ -1,7 +1,7 @@
 {
-  "name": "vite_react_shadcn_ts",
-  "private": true,
-  "version": "0.0.0",
+  "name": "@prithaprith/flood-guardian",
+  "private": false,
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -85,6 +85,6 @@
     "vite": "^5.4.1"
   },
   "publishConfig": {
-  "@prithaprith:registry": "https://npm.pkg.github.com"
-}
+    "registry": "https://npm.pkg.github.com/@prithaprith"
+  }
 }
