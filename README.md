@@ -2,7 +2,7 @@
 
 ### Overview
 
-Flood Watch Buddy is a React-based web application designed to help users stay safe and informed during flood events. It provides real-time flood alerts, safe route recommendations, emergency contacts, a flood gallery, and more.
+FloodGuardian is a mobile-first application designed to predict, prepare for, and respond to floods in vulnerable areas. By combining real-time satellite data and community-driven alerts, the app empowers users with life-saving tools from early warnings and safe route navigation to emergency SOS messaging and resource access. Whether you're planning ahead or facing rising waters, FloodGuardian helps communities stay informed, connected, and protected.
 
 ---
 
@@ -20,23 +20,53 @@ Flood Watch Buddy is a React-based web application designed to help users stay s
 
 ---
 
-### Project Structure
+### Project Folder Structure
 
 ```
-flood-watch-buddy-app/
-  ├── src/
-  │   ├── components/      # Reusable UI components (button, card, sidebar, etc.)
-  │   ├── hooks/           # Custom React hooks
-  │   ├── lib/             # Utility functions and libraries
-  │   ├── pages/           # Main application pages (Home, Map, Guide, etc.)
-  │   ├── App.tsx          # Main app component with routing
-  │   └── main.tsx         # Entry point
-  ├── public/              # Static assets (images, data, etc.)
-  ├── index.html           # HTML template
-  ├── tailwind.config.ts   # Tailwind CSS configuration
-  ├── postcss.config.js    # PostCSS configuration
-  ├── package.json         # Project metadata and scripts
-  └── README.md            # Project documentation
+Flood-Guardian/
+├── .github/
+│   └── workflows/           # GitHub Actions for CI/CD
+│
+├── public/                  # Static assets served directly
+│   ├── audio/               # Audio files (alerts, sounds)
+│   ├── data/                # JSON or static datasets
+│   ├── flood-gallery/       # Flood-related image assets
+│   ├── Home/                # Static assets for Home page
+│   ├── Gallery/             # Static assets for Gallery page
+│   ├── Pages/               # Assets for static pages
+│   ├── SafeRoutes/          # Route maps, directions, etc.
+│   ├── SOSMessage/          # Media/assets for SOS message UI
+│   ├── favicon.ico          # Browser tab icon
+│   ├── placeholder.svg      # Placeholder images
+│   └── robots.txt           # SEO-related file for web crawlers
+│
+├── src/                     # Main application source code
+│   ├── components/          # Reusable UI components (Button, Card, Sidebar, etc.)
+│   ├── hooks/               # Custom React hooks (e.g., useLocation, useFetch)
+│   ├── lib/                 # Utility functions, API services, constants
+│   ├── pages/               # Main app pages (Home, Map, Guide, SOS, etc.)
+│   ├── App.css              # Global app-level CSS
+│   ├── App.tsx              # Main App component including routing logic
+│   ├── index.css            # Tailwind or other global styles
+│   ├── main.tsx             # App entry point (ReactDOM renders App)
+│   └── vite-env.d.ts        # Vite/TypeScript environment declarations
+│
+├── .gitignore               # Files and folders ignored by Git
+├── .npmrc                   # NPM configuration (e.g., registry, cache)
+├── README.md                # Project overview, setup instructions
+├── bun. lockb                # Bun package manager lock file
+├── components.json          # Component registry or metadata (possibly for a UI builder)
+├── eslint.config.js         # Linting rules and configurations
+├── index.html               # HTML entry point for Vite
+├── package-lock.json        # Dependency lock file for npm
+├── package.json             # Project metadata and dependencies
+├── postcss.config.js        # PostCSS configuration (used with Tailwind)
+├── tailwind.config.ts       # Tailwind CSS configuration
+├── tsconfig.app.json        # TypeScript config specific to the app
+├── tsconfig.json            # Base TypeScript config
+├── tsconfig.node.json       # TypeScript config for Node-related code
+└── vite.config.ts           # Vite build tool configuration
+
 ```
 
 ---
@@ -45,8 +75,8 @@ flood-watch-buddy-app/
 
 1. **Clone the repository:**
    ```sh
-   git clone https://github.com/AdnanSalazzar/Flood-App.git
-   cd Flood-App
+   https://github.com/prithaprith/flood-guardian.git
+   cd flood-guardian
    ```
 
 2. **Install dependencies:**
@@ -60,7 +90,8 @@ flood-watch-buddy-app/
    ```
 
 4. **Open your browser:**
-   Visit [http://localhost:5173](http://localhost:5173) (or the port shown in your terminal).
+   The app is hosted on Azure for easy access and testing. [Here is the link → http://48.217.68.36:8080/](http://48.217.68.36:8080/)
+
 
 ---
 
