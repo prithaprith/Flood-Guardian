@@ -75,8 +75,8 @@ Flood-Guardian/
 
 1. **Clone the repository:**
    ```sh
-   git clone https://github.com/AdnanSalazzar/Flood-App.git
-   cd Flood-App
+   https://github.com/prithaprith/flood-guardian.git
+   cd flood-guardian
    ```
 
 2. **Install dependencies:**
@@ -90,7 +90,8 @@ Flood-Guardian/
    ```
 
 4. **Open your browser:**
-   Visit [http://localhost:5173](http://localhost:5173) (or the port shown in your terminal).
+   The app is hosted on Azure for easy access and testing. [Here is the link → http://48.217.68.36:8080/](http://48.217.68.36:8080/)
+
 
 ---
 
