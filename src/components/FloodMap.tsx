@@ -45,11 +45,10 @@ export const FloodMap: React.FC<FloodMapProps> = ({ isSatellite, floodZones }) =
     const map = new maplibregl.Map({
       container: mapContainer.current,
       style: isSatellite
-        ? 'https://tiles.stadiamaps.com/styles/alidade_satellite.json'
-        : 'https://tiles.stadiamaps.com/styles/alidade_smooth.json',
+        ? `https://api.maptiler.com/maps/hybrid/style.json?key=OAybvJvxfYS3pOuyzm8u`
+        : `https://api.maptiler.com/maps/streets/style.json?key=OAybvJvxfYS3pOuyzm8u`,
       center: [8.6753, 9.082],
       zoom: 5,
-
     });
 
     mapRef.current = map;

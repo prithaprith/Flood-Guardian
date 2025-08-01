@@ -299,7 +299,7 @@ const SafeRoutePage = () => {
 
     map.current = new maplibregl.Map({
       container: mapContainer.current!,
-      style: "https://tiles.stadiamaps.com/styles/alidade_smooth.json",
+      style: `https://api.maptiler.com/maps/streets/style.json?key=OAybvJvxfYS3pOuyzm8u`,
       center: [8.6753, 9.082], // Nigeria center
       zoom: 6,
     });
@@ -510,8 +510,8 @@ const SafeRoutePage = () => {
                       {nearestRoadProperties.PAVETYPE}
                     </p> */}
                     <p>
-                      <span className="text-red-500">Condition:</span>{" "}
-                      {nearestRoadProperties.CONDITION}
+                      <span className="font-bold">Condition:{" "}
+                      {nearestRoadProperties.CONDITION}</span>
                     </p>
                     <p>
                       <span className="text-gray-700">Road Width:</span>{" "}
@@ -683,7 +683,9 @@ const SafeRoutePage = () => {
 
                   {/* Call Button */}
                   <button
-                    onClick={() => (window.location.href =`tel:${volunteer.phone}`)}
+                    onClick={() =>
+                      (window.location.href = `tel:${volunteer.phone}`)
+                    }
                     className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-1"
                   >
                     <Phone className="w-4 h-4" />
