@@ -2,7 +2,7 @@
 
 ### Overview
 
-Flood Watch Buddy is a React-based web application designed to help users stay safe and informed during flood events. It provides real-time flood alerts, safe route recommendations, emergency contacts, a flood gallery, and more.
+FloodGuardian is a mobile-first application designed to predict, prepare for, and respond to floods in vulnerable areas. By combining real-time satellite data and community-driven alerts, the app empowers users with life-saving tools from early warnings and safe route navigation to emergency SOS messaging and resource access. Whether you're planning ahead or facing rising waters, FloodGuardian helps communities stay informed, connected, and protected.
 
 ---
 
