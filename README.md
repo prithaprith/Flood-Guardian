@@ -107,20 +107,40 @@ Flood-Guardian/
 
 ### Technologies Used
 
-- [React](https://react.dev/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- Local Storage
-- JSON
-- GEOJSON
-- Maptiler Cloud
-- npm 
-- Azure
-- Utilized the Turf.js library to accurately determine the nearest safe evacuation route
+### 🛠️ Technologies Used
+
+- **[React](https://react.dev/)**  
+  A popular JavaScript library for building fast, interactive user interfaces using reusable components.
+
+- **[Tailwind CSS](https://tailwindcss.com/)**  
+  A utility-first CSS framework that allows rapid styling of components with a consistent and responsive design system.
+
+- **Local Storage**  
+  Used to persist user data such as emergency contacts and preferences directly in the browser, enabling offline support.
+
+- **JSON**  
+  Employed as the primary data format for storing, parsing, and exchanging structured data across components and storage.
+
+- **GeoJSON**  
+  A geospatial data format used to represent geographical features and route data, enabling map visualization and spatial computations.
+
+- **Maptiler Cloud**  
+  A mapping platform used to render interactive, customizable maps and layers via MapLibre GL integration.
+
+- **npm**  
+  The Node.js package manager used to install and manage project dependencies and scripts during development.
+
+- **Azure**  
+  Microsoft’s cloud platform used for hosting and deploying the application, ensuring scalability and availability.
+
+- **Turf.js**  
+  A powerful geospatial analysis library used to calculate the nearest safe evacuation route based on the user’s current location and geographic data.
+
 
 ---
 
 ### API and Dataset
-- OPEN EPI [Flood Forcast](https://developer.openepi.io/data-catalog/resource/0b792d08-c891-4929-b065-ded3615b45f6)
+- [OpenEPI](https://developer.openepi.io/data-catalog/resource/0b792d08-c891-4929-b065-ded3615b45f6) Flood Forecast API 
 - Nigeria Road Network from [World Bank](https://data.humdata.org/dataset/hotosm_nga_roads) 
 - Integrated [Nominatim](https://nominatim.org) API to retrieve the address corresponding to the user’s real-time location
 
