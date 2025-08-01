@@ -510,12 +510,19 @@ const SafeRoutePage = () => {
                       {nearestRoadProperties.PAVETYPE}
                     </p> */}
                     <p>
-                      <span className="font-bold">Condition:{" "}
-                      {nearestRoadProperties.CONDITION}</span>
+                      <span
+                        className={`font-bold ${
+                          nearestRoadProperties.CONDITION === "Poor"
+                            ? "text-red-600"
+                            : "text-green-600"
+                        }`}
+                      >
+                        Condition: {nearestRoadProperties.CONDITION}
+                      </span>
                     </p>
                     <p>
                       <span className="text-gray-700">Road Width:</span>{" "}
-                      {nearestRoadProperties.WIDTH ?? "N/A"} <span>m</span>
+                      {nearestRoadProperties.WIDTH ?? "N/A"} <span>meters</span>
                     </p>
                   </div>
 

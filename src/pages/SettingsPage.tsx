@@ -29,7 +29,7 @@ const SettingsPage = () => {
   const [isPregnant, setIsPregnant] = useState(false);
   const [hasElderly, setHasElderly] = useState(false);
   const [hasChild, setHasChild] = useState(false);
-  const [userName, setUserName] = useState("Anonymous User");
+  const [userName, setUserName] = useState("Anonymous User (Press to Edit)");
   const [location, setLocation] = useState("Detecting...");
 
   const [emergencyContacts, setEmergencyContacts] = useState([
@@ -170,7 +170,7 @@ const SettingsPage = () => {
           }
         },
         () => {
-          setLocation("Permission denied");
+          setLocation("");
         }
       );
     } else {

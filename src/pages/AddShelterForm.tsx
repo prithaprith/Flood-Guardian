@@ -11,7 +11,36 @@ const AddSafeRoutePage = () => {
     capacity: '',
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const shelterOptions = [
+    'School',
+    'College Auditorium',
+    'Community Center',
+    'Town Hall',
+    'Indoor Stadium',
+    'Football Field',
+    'Cricket Stadium',
+    'Railway Station Waiting Area',
+    'Bus Terminal',
+    'Public Library',
+    'University Gymnasium',
+    'Public Mosque',
+    'Temple Hall',
+    'Church Basement',
+    'Cyclone Shelter',
+    'Union Parishad Office',
+    'Municipal Office',
+    'Govt. Health Complex',
+    'Fire Service HQ',
+    'NGO Safe House',
+    'Local NGO Office',
+    'Covered Market Building',
+    'Warehouse Facility',
+    'Old Govt Building',
+  ];
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -31,15 +60,21 @@ const AddSafeRoutePage = () => {
     <div className="p-6 max-w-md mx-auto">
       <h2 className="text-2xl font-bold mb-6 text-center">Add Safe Shelter</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="text"
+        <select
           name="name"
-          placeholder="Shelter Name"
           value={formData.name}
           onChange={handleChange}
           required
           className="w-full border p-2 rounded"
-        />
+        >
+          <option value="">Select Shelter Type</option>
+          {shelterOptions.map((option, index) => (
+            <option key={index} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+
         <input
           type="text"
           name="latitude"

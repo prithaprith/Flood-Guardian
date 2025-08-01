@@ -61,19 +61,19 @@ const ChatAssistantPage = () => {
       msg.includes("help") ||
       msg.includes("emergency")
     ) {
-      return "I've alerted emergency services to your location. Please stay where you are if it's safe, or move to higher ground if possible. Keep your phone charged and stay on the line. Help is on the way!";
+      return "You can contact emergency contacts or get in touch with volunteers on the SOS page. Would you like to go there?";
     } else if (msg.includes("safe") || msg.includes("danger")) {
       return "Your current area shows SAFE flood risk. I recommend monitoring the situation closely and being prepared to evacuate if conditions worsen. Stay away from flooded roads and moving water.";
     } else if (msg.includes("pack") || msg.includes("evacuate")) {
       return "For evacuation, pack: Important documents, medications, water (1 gallon per person per day), non-perishable food, flashlight, batteries, first aid kit, and warm clothes. Keep everything in a waterproof bag.";
     } else if (msg.includes("pregnan") || msg.includes("expecting baby")) {
       const pregnancyReplies = [
-        "If you're pregnant, prioritize getting to a medical-equipped shelter. The Community Center has access to basic maternity care. Carry your prenatal records and necessary medications. Avoid stress and rest as much as possible. Do you need assistance finding such a shelter?",
-        "Please stay calm and seek a shelter with maternity support. The Community Center is 0.5 km away and is equipped to assist pregnant women.",
-        "If you're experiencing contractions or feel unwell, call emergency services immediately. Rescue teams can prioritize your evacuation.",
-        "Shelters marked with a red cross icon usually provide medical care, including support for pregnant women. Would you like directions to one nearby?",
-        "Ensure you pack essentials like prenatal records, water, medications, and snacks. We can help you locate the nearest medical shelter. Do you want that?",
-        "Pregnant women are advised to avoid walking through floodwater. Wait for help if possible or request transportation to a shelter. Can I guide you to the nearest facility?",
+        "Our System will give you the most priority dont worry. If you're pregnant, prioritize getting to a medical-equipped shelter. The Community Center has access to basic maternity care. Carry your prenatal records and necessary medications. Avoid stress and rest as much as possible. Do you need Visit the SOS Page?",
+        "Our System will give you the most priority dont worry. Please stay calm and seek a shelter with maternity support. The Community Center is 0.5 km away and is equipped to assist pregnant women. Do you need Visit the SOS Page?",
+        "Our System will give you the most priority dont worry. If you're experiencing contractions or feel unwell, call emergency services immediately. Rescue teams can prioritize your evacuation. Do you need Visit the SOS Page?",
+        "Our System will give you the most priority dont worry. Shelters marked with a red cross icon usually provide medical care, including support for pregnant women. Do you need Visit the SOS Page?",
+        "Our System will give you the most priority dont worry. Ensure you pack essentials like prenatal records, water, medications, and snacks. We can help you locate the nearest medical shelter. Do you need Visit the SOS Page?",
+        "Our System will give you the most priority dont worry. Pregnant women are advised to avoid walking through floodwater. Wait for help if possible or request transportation to a shelter. Do you need Visit the SOS Page?",
       ];
 
       const randomReply =
@@ -109,8 +109,7 @@ const ChatAssistantPage = () => {
           Back
         </Button>
         <h1 className="text-2xl font-bold flex items-center">
-          <Bot className="h-7 w-7 mr-2 text-primary" />
-          AI Assistant
+          Flood Assistant
         </h1>
         <div className="w-20" />
       </div>
@@ -150,6 +149,29 @@ const ChatAssistantPage = () => {
                           View Safe Route
                         </Button>
                       )}
+                    {msg.isBot && msg.text.includes("SOS page") && (
+                      <Button
+                        size="sm"
+                        className="text-xs mt-2"
+                        onClick={() => navigate("/emergency-sos")}
+                      >
+                        Go to SOS Page
+                      </Button>
+                    )}
+
+                    {msg.isBot &&
+                      msg.text.includes(
+                        "Our System will"
+                      ) && (
+                        <Button
+                          size="sm"
+                          className="text-xs mt-2"
+                          onClick={() => navigate("/shelters?type=maternity")}
+                        >
+                          View SOS page
+                        </Button>
+                      )}
+
                     <p className="text-xs opacity-70 mt-1">
                       {msg.timestamp.toLocaleTimeString()}
                     </p>

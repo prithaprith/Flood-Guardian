@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Phone, MessageCircle, User, XCircle } from "lucide-react";
+import { Phone, User, PlusCircle } from "lucide-react";
 
 type Contact = {
   id: string;
@@ -15,16 +15,16 @@ type Message = {
   timestamp: Date;
 };
 
-const mockContacts: Contact[] = [
+const dummyContacts: Contact[] = [
   { id: "4", name: "John Doe", phone: "+2348012345678" },
   { id: "5", name: "Jane Smith", phone: "+2348098765432" },
+  { id: "6", name: "Dr. Adams", phone: "+2348031122334" },
+  { id: "7", name: "Ms. Claire", phone: "+2348055566778" },
 ];
 
 const MessengerPage = () => {
-  const [contacts] = useState<Contact[]>(mockContacts);
-  const [selectedContact, setSelectedContact] = useState<Contact | null>(
-    contacts[0]
-  );
+  const [contacts, setContacts] = useState<Contact[]>([]);
+  const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "m1",
@@ -40,8 +40,8 @@ const MessengerPage = () => {
     },
   ]);
   const [newMessage, setNewMessage] = useState("");
-
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
   const [emergencyContacts, setEmergencyContacts] = useState<Contact[]>([
     { id: "1", name: "Police", phone: "911", isEmergency: true },
     { id: "2", name: "Fire Dept.", phone: "101", isEmergency: true },
@@ -53,73 +53,83 @@ const MessengerPage = () => {
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setEmergencyContacts(parsed);
+        if (Array.isArray(parsed)) {
+          // Filter out contacts with empty name or phone
+          const validContacts = parsed.filter(
+            (c: Contact) => c.name?.trim() && c.phone?.trim()
+          );
+
+          setEmergencyContacts(validContacts);
+
+          // Merge dummy contacts with cleaned emergency ones
+          const merged = [
+            ...dummyContacts,
+            ...validContacts.map((c: Contact) => ({
+              ...c,
+              isEmergency: false,
+            })),
+          ];
+          setContacts(merged);
+          setSelectedContact(merged[0] || null);
         }
       } catch (err) {
         console.error(
           "Failed to load emergency contacts from localStorage",
           err
         );
+        setContacts(dummyContacts);
+        setSelectedContact(dummyContacts[0]);
       }
+    } else {
+      setContacts(dummyContacts);
+      setSelectedContact(dummyContacts[0]);
     }
   }, []);
 
-  // Scroll chat to bottom on new messages
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   const sendMessage = () => {
     if (!newMessage.trim() || !selectedContact) return;
-
     const msg: Message = {
       id: Math.random().toString(),
       sender: "me",
       text: newMessage.trim(),
       timestamp: new Date(),
     };
-
     setMessages((prev) => [...prev, msg]);
     setNewMessage("");
   };
 
   return (
     <div className="flex h-screen bg-gray-100">
-      {/* Contacts Sidebar */}
+      {/* Sidebar */}
       <aside className="w-72 border-r border-gray-300 bg-white flex flex-col">
         <h2 className="text-xl font-bold p-4 border-b border-gray-300">
           Contacts
         </h2>
 
+        {/* Contact list */}
         <div className="flex-1 overflow-y-auto">
           {contacts.map((c) => (
             <button
               key={c.id}
-              className={`flex items-center gap-3 p-3 w-full text-left hover:bg-blue-100 transition
-                ${
-                  selectedContact?.id === c.id
-                    ? "bg-blue-200 font-semibold"
-                    : ""
-                }
-              `}
+              className={`flex items-center gap-3 p-3 w-full text-left hover:bg-blue-100 transition ${
+                selectedContact?.id === c.id ? "bg-blue-200 font-semibold" : ""
+              }`}
               onClick={() => setSelectedContact(c)}
             >
               <User className="w-6 h-6 text-gray-600" />
               <div className="flex flex-col">
                 <span>{c.name}</span>
                 <small className="text-gray-500">{c.phone}</small>
-                {c.isEmergency && (
-                  <span className="text-xs text-red-600 font-bold">
-                    EMERGENCY
-                  </span>
-                )}
               </div>
             </button>
           ))}
         </div>
 
-        {/* Emergency Contact Section */}
+        {/* Emergency section */}
         <div className="border-t border-gray-300 p-4 bg-red-50">
           <h3 className="font-semibold text-red-700 mb-2 flex items-center gap-2">
             <Phone className="w-5 h-5" />
@@ -138,7 +148,7 @@ const MessengerPage = () => {
         </div>
       </aside>
 
-      {/* Chat Area */}
+      {/* Chat */}
       <main className="flex-1 flex flex-col">
         {/* Header */}
         <header className="flex items-center border-b border-gray-300 p-4 bg-white">
@@ -159,13 +169,11 @@ const MessengerPage = () => {
           {messages.map((msg) => (
             <div
               key={msg.id}
-              className={`max-w-xs mb-3 p-3 rounded-lg break-words
-                ${
-                  msg.sender === "me"
-                    ? "bg-blue-500 text-white ml-auto"
-                    : "bg-white border border-gray-300"
-                }
-              `}
+              className={`max-w-xs mb-3 p-3 rounded-lg break-words ${
+                msg.sender === "me"
+                  ? "bg-blue-500 text-white ml-auto"
+                  : "bg-white border border-gray-300"
+              }`}
             >
               <p>{msg.text}</p>
               <small className="block text-right text-xs text-gray-200 mt-1">
