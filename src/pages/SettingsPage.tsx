@@ -29,7 +29,7 @@ const SettingsPage = () => {
   const [isPregnant, setIsPregnant] = useState(false);
   const [hasElderly, setHasElderly] = useState(false);
   const [hasChild, setHasChild] = useState(false);
-  const [userName, setUserName] = useState("Anonymous User (Press to Edit)");
+  const [userName, setUserName] = useState("");
   const [location, setLocation] = useState("Detecting...");
 
   const [emergencyContacts, setEmergencyContacts] = useState([
@@ -204,6 +204,7 @@ const SettingsPage = () => {
               className="font-semibold text-lg mb-1"
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
+              placeholder="Enter your name"
             />
             <p className="text-sm text-muted-foreground">
               Location: {location}
