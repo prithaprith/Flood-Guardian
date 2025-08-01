@@ -82,6 +82,8 @@ Flood-Guardian/
 2. **Install dependencies:**
    ```sh
    npm install
+   # node version v22.15.0
+   # npm version v10.9.2
    ```
 
 3. **Start the development server:**
