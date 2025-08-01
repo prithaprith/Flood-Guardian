@@ -108,11 +108,22 @@ Flood-Guardian/
 ### Technologies Used
 
 - [React](https://react.dev/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [Vite](https://vitejs.dev/)
 - [Tailwind CSS](https://tailwindcss.com/)
-- [shadcn/ui](https://ui.shadcn.com/)
-- [Lucide Icons](https://lucide.dev/)
+- Local Storage
+- JSON
+- GEOJSON
+- Maptiler Cloud
+- npm 
+- Azure
+- Utilized the Turf.js library to accurately determine the nearest safe evacuation route
+
+---
+
+### API and Dataset
+- OPEN EPI [Flood Forcast](https://developer.openepi.io/data-catalog/resource/0b792d08-c891-4929-b065-ded3615b45f6)
+- Nigeria Road Network from [World Bank](https://data.humdata.org/dataset/hotosm_nga_roads) 
+- Integrated [Nominatim](https://nominatim.org) API to retrieve the address corresponding to the user’s real-time location
+
 
 ---
 
